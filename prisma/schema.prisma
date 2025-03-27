@@ -1,0 +1,57 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  pasien
+  dokter
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(50)
+  email     String    @unique @db.VarChar(50)
+  password  String    @db.VarChar(100)
+  role      Role
+  questions Question[]
+  jawaban   Jawaban[]
+  sessions Session[]
+  
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  userId    Int
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Question {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  user       User      @relation(fields: [user_id], references: [id])
+  file_path  String?   @db.VarChar(100)
+  question   String    @db.Text
+  created_at DateTime  @default(now())
+  jawaban    Jawaban[]
+  
+  @@map("questions")
+}
+
+model Jawaban {
+  id          Int       @id @default(autoincrement())
+  question_id Int
+  question    Question  @relation(fields: [question_id], references: [id])
+  user_id     Int
+  user        User      @relation(fields: [user_id], references: [id])
+  message     String    @db.Text
+  created_at  DateTime  @default(now())
+  
+  @@map("jawaban")
+}
