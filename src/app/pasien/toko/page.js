@@ -11,8 +11,8 @@ const healthProducts = [
     description: "Meningkatkan sistem kekebalan tubuh",
     price: 85000,
     category: "Vitamin",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/vitamin-c-supplement",
+    imageUrl: "/toko/product/vitamin-c.jpeg",
+    affiliateLink: "https://www.tokopedia.com/mandjur/holisticare-ester-c-30-tablet-suplemen-vitamin-c-daya-tahan-tubuh",
   },
   {
     id: 2,
@@ -20,8 +20,8 @@ const healthProducts = [
     description: "Masker kesehatan berkualitas tinggi",
     price: 45000,
     category: "Alat Pelindung",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/masker-medis-hijau",
+    imageUrl: "/toko/product/masker-hijau.jpeg",
+    affiliateLink: "https://www.tokopedia.com/wbm-store/masker-sensi-3ply-earloop-isi-50-medis-surgical-face-mask-sensi-3ply-32aec",
   },
   {
     id: 3,
@@ -29,8 +29,8 @@ const healthProducts = [
     description: "Menjaga kesehatan tulang dan sistem imun",
     price: 120000,
     category: "Vitamin",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/vitamin-d-supplement",
+    imageUrl: "/toko/product/vitamin-d.jpg",
+    affiliateLink: "https://www.tokopedia.com/bayerhealth/cdr-multivitamin-suplemen-kalsium-vitamin-c-d-dan-b6-rasa-jeruk-15-tablet-x-4-unit-1729801552126641756",
   },
   {
     id: 4,
@@ -38,8 +38,8 @@ const healthProducts = [
     description: "Membunuh 99.9% kuman",
     price: 25000,
     category: "Kebersihan",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/hand-sanitizer-gel",
+    imageUrl: "/toko/product/hand-sanitizer.png",
+    affiliateLink: "https://www.tokopedia.com/ayakamu/promo-hand-sinitizer-60ml-softies-gel",
   },
   {
     id: 5,
@@ -47,8 +47,8 @@ const healthProducts = [
     description: "Digital dengan akurasi tinggi",
     price: 250000,
     category: "Alat Kesehatan",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/tensi-digital",
+    imageUrl: "/toko/product/alat-tekanan-darah.jpg",
+    affiliateLink: "https://www.tokopedia.com/lvcherry/tensimeter-digital-omnicron-alat-ukur-tekanan-darah-with-voice",
   },
   {
     id: 6,
@@ -56,8 +56,8 @@ const healthProducts = [
     description: "Nutrisi lengkap untuk keseharian",
     price: 150000,
     category: "Vitamin",
-    imageUrl: "/api/placeholder/300/300",
-    affiliateLink: "https://www.tokopedia.com/multivitamin-lengkap",
+    imageUrl: "/toko/product/multivitamin.png",
+    affiliateLink: "https://www.tokopedia.com/mentengfarma/renovit-30-kaplet-suplemen-multivitamin-lengkap-menjaga-imun-tubuh",
   },
 ];
 

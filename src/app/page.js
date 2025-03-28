@@ -68,7 +68,7 @@ export default function LandingPage() {
             <ShoppingCart className="mx-auto h-12 w-12 text-green-600 mb-4" />
             <h4 className="text-xl font-semibold mb-3 text-blue-900">Toko Kesehatan</h4>
             <p className="text-gray-600 mb-4">Berbagai produk kesehatan berkualitas, dari obat-obatan hingga alat medis.</p>
-            <Link href="/toko" className="text-blue-600 hover:underline flex items-center justify-center">
+            <Link href="/pasien/toko" className="text-blue-600 hover:underline flex items-center justify-center">
               Kunjungi Toko <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
