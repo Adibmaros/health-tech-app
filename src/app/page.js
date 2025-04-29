@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, ShoppingCart, FileText, Stethoscope, Clock, Shield, ArrowRight, Sticker } from "lucide-react";
+import { MessageCircle, ShoppingCart, FileText, Stethoscope, Clock, Shield, ArrowRight, Sticker, ChevronDown } from "lucide-react";
 
 export default function LandingPage() {
+  const [showProLogin, setShowProLogin] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       {/* Header */}
@@ -14,12 +16,6 @@ export default function LandingPage() {
           <h1 className="text-2xl font-bold text-blue-800">Health Tech</h1>
         </div>
         <nav className="flex items-center space-x-4">
-          {/* Dokter Login Button */}
-          <Link href="/dokter/login" className="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 rounded-full transition">
-            <Sticker className="mr-2 h-4 w-4" />
-            Login Dokter
-          </Link>
-
           {/* Patient Login and Register Buttons */}
           <Link href="/pasien/login" className="px-4 py-2 text-blue-600 hover:bg-blue-100 rounded-full transition">
             Login
@@ -27,6 +23,27 @@ export default function LandingPage() {
           <Link href="/pasien/register" className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
             Daftar
           </Link>
+
+          {/* Professional Login Dropdown */}
+          <div className="relative">
+            <button onClick={() => setShowProLogin(!showProLogin)} className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full transition">
+              <span className="text-sm">Tenaga Kesehatan</span>
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </button>
+
+            {showProLogin && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-10">
+                <Link href="/apoteker/login" className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 transition">
+                  <Sticker className="mr-2 h-4 w-4 text-green-600" />
+                  Login Apoteker
+                </Link>
+                <Link href="/dokter/login" className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 transition">
+                  <Stethoscope className="mr-2 h-4 w-4 text-blue-600" />
+                  Login Dokter
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
       </header>
 
@@ -45,7 +62,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="hidden md:block">
-          <img src="/api/placeholder/500/400" alt="Health Tech Dashboard" className="rounded-xl shadow-2xl" />
+          <img src="/doctor.png" alt="Health Tech Dashboard" className="rounded-xl shadow-2xl" />
         </div>
       </main>
 
@@ -125,8 +142,51 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="bg-blue-900 text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 Health Tech. All Rights Reserved.</p>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h4 className="text-lg font-medium mb-4">Health Tech</h4>
+              <p className="text-blue-200 text-sm">Solusi kesehatan digital terpadu untuk kebutuhan medis Anda.</p>
+            </div>
+            <div>
+              <h4 className="text-lg font-medium mb-4">Layanan</h4>
+              <ul className="space-y-2 text-blue-200 text-sm">
+                <li>
+                  <Link href="/pasien/toko" className="hover:text-white">
+                    Toko Kesehatan
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/pasien/dashboard" className="hover:text-white">
+                    Konsultasi Dokter
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/pasien/dashboard" className="hover:text-white">
+                    Rekam Medis
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-medium mb-4">Akses Profesional</h4>
+              <ul className="space-y-2 text-blue-200 text-sm">
+                <li>
+                  <Link href="/dokter/login" className="hover:text-white">
+                    Portal Dokter
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/apoteker/login" className="hover:text-white">
+                    Portal Apoteker
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-4 border-t border-blue-800 text-center text-sm text-blue-300">
+            <p>&copy; 2024 Health Tech. All Rights Reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

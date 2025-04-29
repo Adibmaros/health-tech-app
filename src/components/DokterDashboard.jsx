@@ -1,20 +1,19 @@
 "use client";
-
 import React, { useActionState, useState, useEffect } from "react";
-import { FileUp, LogOut, Send, MessageCircle, ShoppingCart, HelpCircle, UserCircle, FileText, Download, CheckCircle2, Search, Filter } from "lucide-react";
+import { FileUp, LogOut, Send, MessageCircle, Phone, ShoppingCart, HelpCircle, UserCircle, FileText, Download, CheckCircle2, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { createJawaban, logOutAction } from "@/app/dokter/dashboard/lib/action";
-import { toast } from "sonner"; // Assuming you're using shadcn/ui toast
+import { toast } from "sonner";
 
 const initialState = {
   message: "",
   success: false,
 };
 
-// Enhanced medical record data with more comprehensive information
+// Enhanced medical record data (unchanged)
 const enhancedMedicalRecords = [
   {
     id: "RM001",
@@ -145,7 +144,8 @@ const enhancedMedicalRecords = [
     diagnosis: "Hernia Nukleus Pulposus L4-L5",
     symptoms: "Nyeri punggung bawah menjalar ke kaki kanan, parestesi, kelemahan otot ekstensor hallucis longus kanan, nyeri bertambah saat batuk/mengejan",
     medicalHistory: "Pekerja angkat beban berat, riwayat trauma punggung 5 tahun lalu, degenerative disc disease",
-    physicalExam: "TD: 130/80 mmHg, HR: 76x/menit, RR: 16x/menit, Suhu: 36.7°C, BB: 82 kg, TB: 178 cm, IMT: 25.9 kg/m², SLR test positif pada 30° kanan, Kekuatan motorik ekstensor hallucis longus kanan 4/5, Sensibilitas berkurang dermatom L5 kanan",
+    physicalExam:
+      "TD: 130/80 mmHg, HR: 76x/menit, RR: 16x/menit, Suhu: 36.7°C, BB: 82 kg, TB: 178 cm, IMT: 25.9 kg/m², SLR test positif pada 30° kanan, Kekuatan motorik ekstensor hallucis longus kanan 4/5, Sensibilitas berkurang dermatom L5 kanan",
     labResults: "MRI lumbosakral: herniasi diskus L4-L5 lateral kanan dengan kompresi akar saraf L5, EMG/NCV: radiculopathy L5 kanan",
     treatment: "Pregabalin 75mg 2x sehari, Meloxicam 15mg 1x sehari, fisioterapi fokus pada core strengthening dan Williams flexion exercise, tirah baring saat nyeri akut",
     notes: "Disarankan konsultasi dengan dokter bedah saraf untuk evaluasi operatif jika tidak ada perbaikan dalam 6 minggu, hindari aktivitas mengangkat beban berat, edukasi postur dan ergonomik",
@@ -221,7 +221,8 @@ const enhancedMedicalRecords = [
     symptoms: "Nyeri kolik pinggang kanan, hematuria, disuria, frekuensi berkemih meningkat",
     medicalHistory: "Riwayat batu ginjal 3 tahun lalu, konsumsi air putih kurang, diet tinggi protein hewani dan garam, riwayat keluarga nefrolitiasis",
     physicalExam: "TD: 140/85 mmHg, HR: 88x/menit, RR: 18x/menit, Suhu: 37.0°C, BB: 65 kg, TB: 165 cm, IMT: 23.9 kg/m², Nyeri ketok CVA kanan (+), Nyeri tekan suprapubik (-)",
-    labResults: "Urinalisis: eritrosit 25-30/lpb, leukosit 5-10/lpb, kristal kalsium oksalat (+), USG abdomen: tampak batu 6mm di ureter kanan distal, hidronefrosis ringan ginjal kanan, CT-scan non-kontras: batu ureter kanan 6mm dengan atenuasi 950 HU",
+    labResults:
+      "Urinalisis: eritrosit 25-30/lpb, leukosit 5-10/lpb, kristal kalsium oksalat (+), USG abdomen: tampak batu 6mm di ureter kanan distal, hidronefrosis ringan ginjal kanan, CT-scan non-kontras: batu ureter kanan 6mm dengan atenuasi 950 HU",
     treatment: "Tamsulosin 0.4mg 1x sehari, Ketorolac 30mg IV (rescue), analgesik oral, hidrasi adekuat (2-3 liter/hari), sitrat kalium 10 mEq 3x sehari",
     notes: "Dianjurkan untuk evaluasi metabolik 24-jam urin setelah batu keluar, modifikasi diet sesuai jenis batu, screening keluarga, dan strategi pencegahan jangka panjang",
     nextVisit: "2025-04-25",
@@ -254,10 +255,7 @@ export default function DokterDashboard({ username, questions: initialQuestions 
 
   useEffect(() => {
     if (searchId) {
-      const filtered = enhancedMedicalRecords.filter(record => 
-        record.id.toLowerCase().includes(searchId.toLowerCase()) ||
-        record.name.toLowerCase().includes(searchId.toLowerCase())
-      );
+      const filtered = enhancedMedicalRecords.filter((record) => record.id.toLowerCase().includes(searchId.toLowerCase()) || record.name.toLowerCase().includes(searchId.toLowerCase()));
       setFilteredRecords(filtered);
     } else {
       setFilteredRecords([...enhancedMedicalRecords]);
@@ -268,31 +266,26 @@ export default function DokterDashboard({ username, questions: initialQuestions 
     setIsSubmitting(true);
     try {
       const result = await createJawaban(prevState, formData);
-      
+
       if (result.success) {
-        // Remove the answered question from the list
-        setQuestions(prevQuestions => 
-          prevQuestions.filter(q => q.id !== selectedQuestion.id)
-        );
-        
-        // Close the dialog
+        setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== selectedQuestion.id));
         setSelectedQuestion(null);
-        
-        // Show success toast
         toast.success("Pertanyaan berhasil dijawab!", {
           description: "Pertanyaan telah dihapus dari daftar.",
+          className: "bg-green-600 text-white border-green-700",
         });
       } else {
-        // Handle potential error
         toast.error("Gagal mengirim jawaban", {
           description: result.message || "Silakan coba lagi.",
+          className: "bg-red-600 text-white border-red-700",
         });
       }
-      
+
       return result;
     } catch (error) {
       toast.error("Terjadi kesalahan", {
         description: "Silakan coba lagi.",
+        className: "bg-red-600 text-white border-red-700",
       });
       return { success: false, message: error.message };
     } finally {
@@ -310,17 +303,14 @@ export default function DokterDashboard({ username, questions: initialQuestions 
     window.open(whatsappUrl, "_blank");
   };
 
-  // Answer Submission Button Component
   const SubmitAnswerButton = () => (
     <Button
       type="submit"
       disabled={isSubmitting}
-      className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 
-        bg-green-600 text-white rounded-full 
-        hover:bg-green-700 transition
-        focus:outline-none focus:ring-2 
-        focus:ring-green-500 focus:ring-offset-2
-        disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-full 
+        hover:from-green-700 hover:to-teal-700 transition-all duration-300
+        focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+        disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
     >
       {isSubmitting ? (
         <>
@@ -341,23 +331,27 @@ export default function DokterDashboard({ username, questions: initialQuestions 
   };
 
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 font-sans">
       {/* Header Navigation */}
-      <header className="bg-green-600 text-white py-4 shadow-md">
+      <header className="bg-gradient-to-r from-green-700 to-teal-600 text-white py-4 shadow-lg sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center px-4">
-          <div className="flex items-center space-x-2">
-            <UserCircle className="h-8 w-8" />
-            <span className="font-semibold hidden sm:inline">{username}</span>
+          <div className="flex items-center space-x-3">
+            <div className="bg-white/10 p-2 rounded-full">
+              <UserCircle className="h-8 w-8" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold text-lg">{username}</span>
+              <span className="text-xs text-green-100">Dokter</span>
+            </div>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="flex items-center space-x-4">
-            <button onClick={openWhatsApp} className="hover:bg-green-500/10 p-2 rounded-full transition hover:cursor-pointer group relative" title="Konsultasi">
-            <MessageCircle className="h-6 w-6" />
+            <button onClick={openWhatsApp} className="relative p-2 rounded-full hover:bg-green-600/20 transition-all group" title="Konsultasi via WhatsApp">
+              <MessageCircle className="h-6 w-6" />
               <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">Konsultasi</span>
             </button>
             <form action={formActionLogout}>
-              <button type="submit" className="hover:bg-red-500/10 p-2 rounded-full transition group relative text-red-600 hover:text-red-700 cursor-pointer" title="Logout">
+              <button type="submit" className="relative p-2 rounded-full hover:bg-red-500/20 transition-all group text-red-400 hover:text-red-300" title="Keluar">
                 <LogOut className="h-6 w-6" />
                 <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">Logout</span>
               </button>
@@ -367,29 +361,46 @@ export default function DokterDashboard({ username, questions: initialQuestions 
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-12 max-w-7xl">
         <Tabs defaultValue="pertanyaan" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="pertanyaan">Pertanyaan Pasien</TabsTrigger>
-            <TabsTrigger value="rekam-medis">Rekam Medis</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 m-2 bg-white rounded-xl overflow-hidden shadow-md">
+            <TabsTrigger
+              value="pertanyaan"
+              className="flex items-center justify-center w-full py-2 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-teal-600 data-[state=active]:text-white"
+            >
+              <HelpCircle className="h-4 w-4 mr-2" />
+              Pertanyaan Pasien
+            </TabsTrigger>
+            <TabsTrigger
+              value="rekam-medis"
+              className="flex items-center justify-center w-full py-2 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-teal-600 data-[state=active]:text-white"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Rekam Medis
+            </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="pertanyaan">
-            <div className="bg-white rounded-xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold text-green-800 mb-6">
-                Pertanyaan Pasien
-                <span className="ml-3 text-sm text-gray-600">({questions.length} pertanyaan)</span>
-              </h2>
+            <div className="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+                  <HelpCircle className="h-6 w-6 text-green-600 mr-2" />
+                  Pertanyaan Pasien
+                </h2>
+                <span className="text-sm text-gray-500 bg-green-100 px-3 py-1 rounded-full">{questions.length} pertanyaan</span>
+              </div>
 
               {questions.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">Tidak ada pertanyaan baru saat ini.</div>
+                <div className="text-center text-gray-500 py-12">
+                  <p className="text-lg">Tidak ada pertanyaan baru saat ini.</p>
+                </div>
               ) : (
                 questions.map((question) => (
-                  <div key={question.id} className="border-b py-4 hover:bg-green-50 transition cursor-pointer" onClick={() => setSelectedQuestion(question)}>
+                  <div key={question.id} className="border-b border-gray-100 py-4 hover:bg-green-50/50 rounded-lg transition-all duration-200 cursor-pointer px-4" onClick={() => setSelectedQuestion(question)}>
                     <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-gray-600 line-clamp-2">{question.question}</p>
-                        <p className="text-xs text-gray-500 mt-1">
+                      <div className="space-y-1">
+                        <p className="text-gray-700 font-medium line-clamp-2">{question.question}</p>
+                        <p className="text-xs text-gray-400">
                           {new Date(question.created_at).toLocaleDateString("id-ID", {
                             day: "numeric",
                             month: "long",
@@ -400,7 +411,7 @@ export default function DokterDashboard({ username, questions: initialQuestions 
                         </p>
                       </div>
                       {question.file_path && (
-                        <a href={question.file_path} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800" onClick={(e) => e.stopPropagation()}>
+                        <a href={question.file_path} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 transition-colors" onClick={(e) => e.stopPropagation()}>
                           <FileText className="h-6 w-6" />
                         </a>
                       )}
@@ -410,60 +421,69 @@ export default function DokterDashboard({ username, questions: initialQuestions 
               )}
             </div>
           </TabsContent>
-          
+
           <TabsContent value="rekam-medis">
-            <div className="bg-white rounded-xl shadow-xl p-6">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                <h2 className="text-2xl font-bold text-green-800 mb-4 md:mb-0">
+            <div className="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+                  <FileText className="h-6 w-6 text-green-600 mr-2" />
                   Rekam Medis Pasien
-                  <span className="ml-3 text-sm text-gray-600">({filteredRecords.length} rekam medis)</span>
                 </h2>
-                
-                <div className="relative w-full md:w-64">
+                <div className="relative w-full md:w-80">
                   <Input
                     type="text"
                     placeholder="Cari berdasarkan ID atau nama..."
                     value={searchId}
                     onChange={handleFilterChange}
-                    className="pl-10"
+                    className="pl-12 pr-4 py-3 rounded-full border-gray-200 focus:border-green-400 focus:ring-green-200 text-sm shadow-sm"
                   />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 </div>
               </div>
 
               {filteredRecords.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">Tidak ada rekam medis yang ditemukan.</div>
+                <div className="text-center text-gray-500 py-12">
+                  <p className="text-lg">Tidak ada rekam medis yang ditemukan.</p>
+                </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gradient-to-r from-green-50 to-teal-50">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Umur</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Kelamin</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diagnosis</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          ID
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Nama
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Umur
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Jenis Kelamin
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Tanggal
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Diagnosis
+                        </th>
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Aksi
+                        </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-gray-100">
                       {filteredRecords.map((record) => (
-                        <tr key={record.id} className="hover:bg-green-50 transition">
+                        <tr key={record.id} className="hover:bg-green-50/50 transition-all duration-200">
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{record.id}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.age}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.gender}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.date}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.diagnosis}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <Button
-                              variant="outline"
-                              className="text-green-600 hover:text-green-800 hover:bg-green-50"
-                              onClick={() => {
-                                setSelectedRecord(record);
-                              }}
-                            >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{record.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{record.age}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{record.gender}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{record.date}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{record.diagnosis}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                            <Button variant="outline" className="px-4 py-2 border-green-600 text-green-600 rounded-full hover:bg-green-600 hover:text-white transition-all duration-300 shadow-sm" onClick={() => setSelectedRecord(record)}>
                               Detail
                             </Button>
                           </td>
@@ -480,15 +500,15 @@ export default function DokterDashboard({ username, questions: initialQuestions 
         {/* Answer Modal */}
         {selectedQuestion && (
           <Dialog open={!!selectedQuestion} onOpenChange={() => setSelectedQuestion(null)}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Jawab Pertanyaan</DialogTitle>
+            <DialogContent className="max-w-2xl bg-white rounded-2xl shadow-2xl p-8">
+              <DialogHeader className="bg-gradient-to-r from-green-600 to-teal-600 text-white p-4 rounded-t-xl">
+                <DialogTitle className="text-xl font-semibold">Jawab Pertanyaan</DialogTitle>
               </DialogHeader>
 
-              <div className="space-y-4">
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-gray-700">{selectedQuestion.question}</p>
-                  <p className="text-xs text-gray-500 mt-1">
+              <div className="space-y-6">
+                <div className="bg-green-50 p-6 rounded-xl shadow-inner">
+                  <p className="text-gray-800 font-medium">{selectedQuestion.question}</p>
+                  <p className="text-xs text-gray-500 mt-2">
                     {new Date(selectedQuestion.created_at).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
@@ -499,17 +519,16 @@ export default function DokterDashboard({ username, questions: initialQuestions 
                   </p>
 
                   {selectedQuestion.file_path && (
-                    <div className="mt-3 flex items-center space-x-2">
+                    <div className="mt-4 flex items-center space-x-3">
                       <FileText className="h-5 w-5 text-green-600" />
-                      <a href={selectedQuestion.file_path} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">
+                      <a href={selectedQuestion.file_path} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 hover:underline transition-colors">
                         Lihat Dokumen Terlampir
                       </a>
                     </div>
                   )}
                 </div>
 
-                <form action={formAction} className="space-y-4">
-                  {/* Hidden input for question_id */}
+                <form action={formAction} className="space-y-6">
                   <input type="hidden" name="question_id" value={selectedQuestion.id} />
                   <div>
                     <label htmlFor="answer" className="block text-sm font-medium text-gray-700 mb-2">
@@ -520,9 +539,9 @@ export default function DokterDashboard({ username, questions: initialQuestions 
                       name="answer"
                       placeholder="Tulis jawaban Anda di sini..."
                       rows={6}
-                      className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm 
-                      focus:border-green-300 focus:ring focus:ring-green-200 
-                      focus:ring-opacity-50 text-sm"
+                      className="mt-1 p-4 block w-full rounded-xl border-gray-200 shadow-sm 
+                        focus:border-green-400 focus:ring focus:ring-green-200 focus:ring-opacity-50 
+                        text-sm transition-all duration-300 disabled:opacity-50"
                       required
                       disabled={isSubmitting}
                     />
@@ -540,53 +559,57 @@ export default function DokterDashboard({ username, questions: initialQuestions 
         {/* Medical Record Detail Modal */}
         {selectedRecord && (
           <Dialog open={!!selectedRecord} onOpenChange={() => setSelectedRecord(null)}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-xl text-green-800">
-                  Detail Rekam Medis: {selectedRecord.id}
-                </DialogTitle>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl p-8">
+              <DialogHeader className="bg-gradient-to-r from-green-600 to-teal-600 text-white p-4 rounded-t-xl">
+                <DialogTitle className="text-xl font-semibold">Detail Rekam Medis: {selectedRecord.id}</DialogTitle>
               </DialogHeader>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {/* Patient Information */}
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2 text-green-700">Informasi Pasien</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-green-50 p-6 rounded-xl shadow-inner">
+                  <h3 className="font-semibold text-lg mb-4 text-green-800 flex items-center">
+                    <UserCircle className="h-5 w-5 mr-2" />
+                    Informasi Pasien
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-sm text-gray-500">Nama</p>
-                      <p className="font-medium">{selectedRecord.name}</p>
+                      <p className="text-sm text-gray-500 font-medium">Nama</p>
+                      <p className="text-gray-800">{selectedRecord.name}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Umur</p>
-                      <p className="font-medium">{selectedRecord.age} tahun</p>
+                      <p className="text-sm text-gray-500 font-medium">Umur</p>
+                      <p className="text-gray-800">{selectedRecord.age} tahun</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Jenis Kelamin</p>
-                      <p className="font-medium">{selectedRecord.gender}</p>
+                      <p className="text-sm text-gray-500 font-medium">Jenis Kelamin</p>
+                      <p className="text-gray-800">{selectedRecord.gender}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Tanggal Pemeriksaan</p>
-                      <p className="font-medium">{selectedRecord.date}</p>
+                      <p className="text-sm text-gray-500 font-medium">Tanggal Pemeriksaan</p>
+                      <p className="text-gray-800">{selectedRecord.date}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Diagnosis & Symptoms */}
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <h3 className="font-semibold text-lg mb-2 text-green-700">Diagnosis & Gejala</h3>
-                  <div className="space-y-3">
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                  <h3 className="font-semibold text-lg mb-4 text-green-800 flex items-center">
+                    <HelpCircle className="h-5 w-5 mr-2" />
+                    Diagnosis & Gejala
+                  </h3>
+                  <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-500">Diagnosis</p>
-                      <p className="font-medium">{selectedRecord.diagnosis}</p>
+                      <p className="text-sm text-gray-500 font-medium">Diagnosis</p>
+                      <p className="text-gray-800 font-medium">{selectedRecord.diagnosis}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Gejala</p>
-                      <p>{selectedRecord.symptoms}</p>
+                      <p className="text-sm text-gray-500 font-medium">Gejala</p>
+                      <p className="text-gray-800">{selectedRecord.symptoms}</p>
                     </div>
                     {selectedRecord.medicalHistory && (
                       <div>
-                        <p className="text-sm text-gray-500">Riwayat Medis</p>
-                        <p>{selectedRecord.medicalHistory}</p>
+                        <p className="text-sm text-gray-500 font-medium">Riwayat Medis</p>
+                        <p className="text-gray-800">{selectedRecord.medicalHistory}</p>
                       </div>
                     )}
                   </div>
@@ -594,19 +617,22 @@ export default function DokterDashboard({ username, questions: initialQuestions 
 
                 {/* Physical Examination & Lab Results */}
                 {(selectedRecord.physicalExam || selectedRecord.labResults) && (
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
-                    <h3 className="font-semibold text-lg mb-2 text-green-700">Pemeriksaan & Hasil Lab</h3>
-                    <div className="space-y-3">
+                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-semibold text-lg mb-4 text-green-800 flex items-center">
+                      <FileText className="h-5 w-5 mr-2" />
+                      Pemeriksaan & Hasil Lab
+                    </h3>
+                    <div className="space-y-4">
                       {selectedRecord.physicalExam && (
                         <div>
-                          <p className="text-sm text-gray-500">Pemeriksaan Fisik</p>
-                          <p>{selectedRecord.physicalExam}</p>
+                          <p className="text-sm text-gray-500 font-medium">Pemeriksaan Fisik</p>
+                          <p className="text-gray-800">{selectedRecord.physicalExam}</p>
                         </div>
                       )}
                       {selectedRecord.labResults && (
                         <div>
-                          <p className="text-sm text-gray-500">Hasil Laboratorium</p>
-                          <p>{selectedRecord.labResults}</p>
+                          <p className="text-sm text-gray-500 font-medium">Hasil Laboratorium</p>
+                          <p className="text-gray-800">{selectedRecord.labResults}</p>
                         </div>
                       )}
                     </div>
@@ -614,29 +640,32 @@ export default function DokterDashboard({ username, questions: initialQuestions 
                 )}
 
                 {/* Treatment Plan */}
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <h3 className="font-semibold text-lg mb-2 text-green-700">Rencana Pengobatan</h3>
-                  <div className="space-y-3">
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                  <h3 className="font-semibold text-lg mb-4 text-green-800 flex items-center">
+                    <Send className="h-5 w-5 mr-2" />
+                    Rencana Pengobatan
+                  </h3>
+                  <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-500">Pengobatan</p>
-                      <p>{selectedRecord.treatment}</p>
+                      <p className="text-sm text-gray-500 font-medium">Pengobatan</p>
+                      <p className="text-gray-800">{selectedRecord.treatment}</p>
                     </div>
                     {selectedRecord.notes && (
                       <div>
-                        <p className="text-sm text-gray-500">Catatan</p>
-                        <p>{selectedRecord.notes}</p>
+                        <p className="text-sm text-gray-500 font-medium">Catatan</p>
+                        <p className="text-gray-800">{selectedRecord.notes}</p>
                       </div>
                     )}
                     <div>
-                      <p className="text-sm text-gray-500">Kunjungan Berikutnya</p>
-                      <p className="font-medium">{selectedRecord.nextVisit}</p>
+                      <p className="text-sm text-gray-500 font-medium">Kunjungan Berikutnya</p>
+                      <p className="text-gray-800 font-medium">{selectedRecord.nextVisit}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end space-x-3">
-                  <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50" onClick={() => setSelectedRecord(null)}>
+                <div className="flex justify-end space-x-4">
+                  <Button variant="outline" className="px-6 py-3 border-green-600 text-green-600 rounded-full hover:bg-green-600 hover:text-white transition-all duration-300 shadow-sm" onClick={() => setSelectedRecord(null)}>
                     Tutup
                   </Button>
                 </div>
@@ -644,7 +673,61 @@ export default function DokterDashboard({ username, questions: initialQuestions 
             </DialogContent>
           </Dialog>
         )}
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-r from-green-700 to-teal-600 text-white py-8 mt-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-bold text-lg mb-4">Layanan Kesehatan</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="text-green-100 hover:text-white transition">
+                    Konsultasi Online
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-green-100 hover:text-white transition">
+                    Tanya Dokter
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-4">Informasi</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="text-green-100 hover:text-white transition">
+                    Tentang Kami
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-green-100 hover:text-white transition">
+                    Kebijakan Privasi
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-4">Kontak</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center text-green-100">
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  <span>support@kesehatan.id</span>
+                </li>
+                <li className="flex items-center text-green-100">
+                  <Phone className="h-4 w-4 mr-2" />
+                  <span>+62 812 3456 7890</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-green-400 mt-8 pt-6 text-center text-green-100">
+            <p>© {new Date().getFullYear()} Health Tech. Hak Cipta Dilindungi.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

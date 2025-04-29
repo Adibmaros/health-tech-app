@@ -10,6 +10,7 @@ generator client {
 enum Role {
   pasien
   dokter
+  apoteker
 }
 
 model User {
@@ -54,4 +55,55 @@ model Jawaban {
   created_at  DateTime  @default(now())
   
   @@map("jawaban")
+}
+
+
+model products {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  price       Int
+  stock       Int
+  image_url   String @db.VarChar(255)
+  description String        @db.Text
+  requires_prescription Boolean      @default(false)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  order_items order_items[]
+}
+
+enum PAYMENT_STATUS {
+  PENDING
+  DIBAYAR
+}
+
+enum APPROVAL_STATUS {
+  MENUNGGU
+  DIPROSES
+  DIKIRIM
+  SELESAI
+}
+
+model orders {
+  id               Int             @id @default(autoincrement())
+  order_date       DateTime        @default(now())
+  total_amount     Int
+  payment_status   PAYMENT_STATUS  @default(PENDING)
+  nama_lengkap     String          @db.VarChar(100)
+  no_telp          String          @db.VarChar(20)
+  email            String          @db.VarChar(100)
+  alamat           String          @db.Text
+  bukti_bayar      String          @db.VarChar(255)
+  resep_dokter     String?         @db.VarChar(255)  // Tambahkan kolom ini untuk URL resep
+  approval_status  APPROVAL_STATUS @default(MENUNGGU)
+  order_items      order_items[]
+}
+
+model order_items {
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  order_id    Int
+  quantity    Int
+  unit_price  Int      // Changed from String to Int to match your description
+  product     products @relation(fields: [product_id], references: [id])
+  order       orders   @relation(fields: [order_id], references: [id])
 }

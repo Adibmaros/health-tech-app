@@ -3,19 +3,12 @@ import { getUser } from "@/lib/auth";
 import PatientDashboard from "@/components/PatientDashboard";
 import { getQuestionsByUser } from "./lib/data";
 
-const page = async () => {
+const Page = async () => {
   const { user } = await getUser();
-  // console.log(user);
-
   const username = user.name;
   const questions = await getQuestionsByUser();
-  console.log(questions);
 
-  return (
-    <div>
-      <PatientDashboard username={username} questions={questions} />
-    </div>
-  );
+  return <PatientDashboard username={username} questions={questions} />;
 };
 
-export default page;
+export default Page;
